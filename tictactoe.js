@@ -18,6 +18,29 @@ function cell() {
 }
 
 
+function gameboard() {
+    let board = [];
+
+    //create the board
+    for (let i = 0; i < 3; i++) {
+        board[i] = [];
+        for (let j = 0; j < 3; j++) {
+            board[i].push(cell());
+            
+        }
+        
+    }
+
+    const selam = () => {
+        console.log(board);
+    }
+    
+
+    return {
+        selam
+    }
+}
 
 
-
+let selamlar = gameboard();
+selamlar.selam();
