@@ -1,6 +1,7 @@
 function cell() {
     //all cells have default value of "0"
-    value = 0;
+    value = 0;  //explain this: if you don't put let in here when a cell's value change all the cell values are changing why? when you
+    // put let before it it does not change why is this?
 
     //you can change the value of the cell
     const changeCellValue = (sign) => {
@@ -31,16 +32,28 @@ function gameboard() {
         
     }
 
-    const selam = () => {
-        console.log(board);
+    const placeSign = (column, row, x) => {
+        if (board[column][row].getCellValue() == 0) {
+            console.log(board[column][row].getCellValue())
+            board[column][row].changeCellValue(x);
+            console.log(board[column + 1][row].getCellValue())
+        }
     }
     
+    const printBoard = () => {
+
+        const extractedBord = board.map((row) => row.map((x) => x.getCellValue()))
+        console.log(extractedBord);
+      
+    }
 
     return {
-        selam
+        placeSign,
+        printBoard
     }
 }
 
+let game = gameboard();
 
-let selamlar = gameboard();
-selamlar.selam();
+game.placeSign(1,2, "a");
+game.printBoard()
