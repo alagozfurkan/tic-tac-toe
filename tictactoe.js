@@ -74,19 +74,98 @@ function gameboard() {
 
 function playGame() {
     
+    let game = gameboard()
+
     //array for changing the round
     players = [
         {
             name: "playlerone",
-            token: "x"
+            token: 1
         },
 
         {
             name: "playertwo",
-            token: "o"
+            token: 2
         }
     ]
 
+    let activePlayer = players[0];
+
+    const roundIt = () => {
+        if (activePlayer == players[0]) {
+            activePlayer = players[1]
+        } else {
+            activePlayer = players[0]
+        }
+    }
+
     
+
+    const winChecker = () => {
+        let board = game.getBoard();
+        
+        for (let i = 0; i < 3; i++) {
+            let row = board[i]
+            for (let j = 0; j < 1; j++) {
+                if (!(row[j].getCellValue() == 0) && (row[j].getCellValue() == row[j+1].getCellValue()) && (row[j].getCellValue() == row[j+2].getCellValue())) {
+                    console.log(`${activePlayer.name} is won!!!`);
+                    activePlayer = players[0];
+                    game.resetBoard();
+                    return
+                }
+            }
+            
+        }
+
+        
+        for (let j = 0; j < 3; j++) {
+            if (!(board[0][j].getCellValue() == 0) && (board[0][j].getCellValue() == board[1][j].getCellValue()) && (board[0][j].getCellValue() == board[2][j].getCellValue())) {
+                console.log(`${activePlayer.name} is won!!!`);
+                activePlayer = players[0];
+                game.resetBoard();
+                return
+            }
+                
+        
+            
+        }
+
+        if (!(board[0][0].getCellValue() == 0) && (board[0][0].getCellValue() == board[1][1].getCellValue()) && (board[0][0].getCellValue() == board[2][2].getCellValue())) {
+            console.log(`${activePlayer.name} is won!!!`);
+            activePlayer = players[0];
+            game.resetBoard();
+            return
+        }
+
+        if (!(board[0][2].getCellValue() == 0) && (board[0][2].getCellValue() == board[1][1].getCellValue()) && (board[0][2].getCellValue() == board[2][0].getCellValue())) {
+            console.log(`${activePlayer.name} is won!!!`);
+            activePlayer = players[0];
+            game.resetBoard();
+            return
+        }
+        
+    }   
+
+    const playRound = (row, column) => {
+        console.log(`It's ${activePlayer.name}s turn`)
+        game.placeSign(row, column, activePlayer.token)
+        console.log(`Placed the sign in ${column} x ${row} location`)
+        game.printBoard()
+        winChecker();
+
+        roundIt()
+        console.log(`It's ${activePlayer.name}s turn`)
+    }
+
+    return {
+        playRound
+    }
 }
 
+const game = playGame();
+
+game.playRound(1, 2);
+game.playRound(1, 3)
+game.playRound(2, 2)
+game.playRound(1, 1)
+game.playRound(3, 2)
