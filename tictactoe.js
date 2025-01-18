@@ -72,19 +72,21 @@ function gameboard() {
     }
 }
 
-let game = gameboard();
+function playGame() {
+    
+    //array for changing the round
+    players = [
+        {
+            name: "playlerone",
+            token: "x"
+        },
 
+        {
+            name: "playertwo",
+            token: "o"
+        }
+    ]
 
-game.printBoard();
+    
+}
 
-game.placeSign(2, 1, 2)
-
-game.printBoard()
-
-game.resetBoard()
-
-game.printBoard()
-
-game.placeSign(1,1,1)
-
-game.printBoard()
