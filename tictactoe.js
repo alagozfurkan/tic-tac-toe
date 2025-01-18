@@ -1,6 +1,6 @@
 function cell() {
     //all cells have default value of "0"
-    value = 0;  //explain this: if you don't put let in here when a cell's value change all the cell values are changing why? when you
+    let value = 0;  //explain this: if you don't put let in here when a cell's value change all the cell values are changing why? when you
     // put let before it it does not change why is this?
 
     //you can change the value of the cell
@@ -12,9 +12,15 @@ function cell() {
         return value
     }
 
+    const resetCellValue = () => {
+        value = 0;
+    }
+
+
     return {
         changeCellValue,
-        getCellValue
+        getCellValue,
+        resetCellValue
     }
 }
 
@@ -32,14 +38,16 @@ function gameboard() {
         
     }
 
-    const placeSign = (column, row, x) => {
-        if (board[column][row].getCellValue() == 0) {
-            console.log(board[column][row].getCellValue())
-            board[column][row].changeCellValue(x);
-            console.log(board[column + 1][row].getCellValue())
+    // place sign on the board
+    const placeSign = (row, column, x) => {
+        if (board[row - 1][column - 1].getCellValue() == 0) {
+            
+            board[row - 1][column - 1].changeCellValue(x);
+           
         }
     }
     
+    // log the board 
     const printBoard = () => {
 
         const extractedBord = board.map((row) => row.map((x) => x.getCellValue()))
@@ -47,13 +55,36 @@ function gameboard() {
       
     }
 
+    const getBoard = () => {
+        return board
+    }
+
+    const resetBoard = () => {
+        board.forEach((row) => row.forEach((element) => element.resetCellValue()))
+    }
+
+
     return {
         placeSign,
-        printBoard
+        printBoard,
+        getBoard,
+        resetBoard
     }
 }
 
 let game = gameboard();
 
-game.placeSign(1,2, "a");
+
+game.printBoard();
+
+game.placeSign(2, 1, 2)
+
+game.printBoard()
+
+game.resetBoard()
+
+game.printBoard()
+
+game.placeSign(1,1,1)
+
 game.printBoard()
