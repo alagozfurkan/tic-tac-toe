@@ -44,6 +44,8 @@ function gameboard() {
             
             board[row - 1][column - 1].changeCellValue(x);
            
+        } else if (board[row - 1][column - 1].getCellValue() == 1 || board[row - 1][column - 1].getCellValue() == 2) {
+            return "cant"
         }
     }
     
@@ -109,7 +111,7 @@ function playGame() {
             for (let j = 0; j < 1; j++) {
                 if (!(row[j].getCellValue() == 0) && (row[j].getCellValue() == row[j+1].getCellValue()) && (row[j].getCellValue() == row[j+2].getCellValue())) {
                     console.log(`${activePlayer.name} is won!!!`);
-                    activePlayer = players[0];
+                    activePlayer = players[1];
                     game.resetBoard();
                     return
                 }
@@ -121,7 +123,7 @@ function playGame() {
         for (let j = 0; j < 3; j++) {
             if (!(board[0][j].getCellValue() == 0) && (board[0][j].getCellValue() == board[1][j].getCellValue()) && (board[0][j].getCellValue() == board[2][j].getCellValue())) {
                 console.log(`${activePlayer.name} is won!!!`);
-                activePlayer = players[0];
+                activePlayer = players[1];
                 game.resetBoard();
                 return
             }
@@ -132,14 +134,14 @@ function playGame() {
 
         if (!(board[0][0].getCellValue() == 0) && (board[0][0].getCellValue() == board[1][1].getCellValue()) && (board[0][0].getCellValue() == board[2][2].getCellValue())) {
             console.log(`${activePlayer.name} is won!!!`);
-            activePlayer = players[0];
+            activePlayer = players[1];
             game.resetBoard();
             return
         }
 
         if (!(board[0][2].getCellValue() == 0) && (board[0][2].getCellValue() == board[1][1].getCellValue()) && (board[0][2].getCellValue() == board[2][0].getCellValue())) {
             console.log(`${activePlayer.name} is won!!!`);
-            activePlayer = players[0];
+            activePlayer = players[1];
             game.resetBoard();
             return
         }
@@ -148,13 +150,17 @@ function playGame() {
 
     const playRound = (row, column) => {
         console.log(`It's ${activePlayer.name}s turn`)
+        if (game.placeSign(row, column, activePlayer.token) == "cant") {
+            return;
+        }
         game.placeSign(row, column, activePlayer.token)
         console.log(`Placed the sign in ${column} x ${row} location`)
         game.printBoard()
+        
         winChecker();
-
         roundIt()
-        console.log(`It's ${activePlayer.name}s turn`)
+        
+        
     }
 
     return {
@@ -162,10 +168,9 @@ function playGame() {
     }
 }
 
-const game = playGame();
 
-game.playRound(1, 2);
-game.playRound(1, 3)
-game.playRound(2, 2)
-game.playRound(1, 1)
-game.playRound(3, 2)
+
+
+
+
+
