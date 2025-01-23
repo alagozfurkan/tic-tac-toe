@@ -1,0 +1,15 @@
+* {
+    outline: black solid 1px;
+}
+
+
+
+
+.container {
+    border: red solid 1px;
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}

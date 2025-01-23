@@ -74,9 +74,14 @@ function gameboard() {
     }
 }
 
-function playGame() {
+
+
+
+
+const playGame =( function () {
     
-    let game = gameboard()
+    let game = gameboard();
+    let board = game.getBoard();
 
     //array for changing the round
     players = [
@@ -102,9 +107,10 @@ function playGame() {
     }
 
     
+    
 
     const winChecker = () => {
-        let board = game.getBoard();
+        
         
         for (let i = 0; i < 3; i++) {
             let row = board[i]
@@ -163,13 +169,62 @@ function playGame() {
         
     }
 
-    return {
-        playRound
+    const loanBoard = () => {
+        return board;
     }
+
+    const displayBoard = () => {
+        
+        const container = document.querySelector(".container");
+        board.forEach((array) => array.forEach((element) => {
+            let newButton = document.createElement("button");
+            //this is not working fix this
+            newButton.textContent = element.getCellValue();
+            container.appendChild(newButton);
+        }))
+    }
+
+    return {
+        playRound,
+        displayBoard,
+        loanBoard
+       
+    }
+})();
+
+
+function playGameInDOM() {
+    const board = playGame.loanBoard();
+    const container = document.querySelector(".container");
+
+    const displayBoard = () => {
+        
+        board.forEach((array) => array.forEach((element) => {
+            let newButton = document.createElement("button");
+            newButton.textContent = element.getCellValue();
+            container.appendChild(newButton);
+        }))
+    }
+    
+
+
+
+    return {
+        displayBoard
+    }
+
 }
 
 
 
+
+
+playGame.playRound(1, 1)
+playGame.playRound(1, 3)
+playGame.playRound(1, 2)
+
+let asss = playGameInDOM()
+asss.displayBoard()
 
 
 
