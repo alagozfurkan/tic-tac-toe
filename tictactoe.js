@@ -39,14 +39,20 @@ function gameboard() {
     }
 
     // place sign on the board
-    const placeSign = (row, column, x) => {
-        if (board[row - 1][column - 1].getCellValue() == 0) {
+    const placeSign = (place, x) => {
+        if (place < 4 && board[0][place - 1].getCellValue() == 0) {
             
-            board[row - 1][column - 1].changeCellValue(x);
+            board[0][place - 1].changeCellValue(x);
            
-        } else if (board[row - 1][column - 1].getCellValue() == 1 || board[row - 1][column - 1].getCellValue() == 2) {
-            return "cant"
-        }
+        } else if(place > 3 && place < 7 && board[1][place - 4].getCellValue() == 0) {
+            board[1][place - 4].changeCellValue(x);
+
+        } else if (place > 6 && board[2][place - 7].getCellValue() == 0) {
+            board[2][place - 7].changeCellValue(x);
+        } else return "cant"
+        
+        
+        // else if (board[row - 1][column - 1].getCellValue() == 1 || board[row - 1][column - 1].getCellValue() == 2) {return "cant"}
     }
     
     // log the board 
@@ -154,13 +160,13 @@ const playGame =( function () {
         
     }   
 
-    const playRound = (row, column) => {
+    const playRound = (place) => {
         console.log(`It's ${activePlayer.name}s turn`)
-        if (game.placeSign(row, column, activePlayer.token) == "cant") {
+        if (game.placeSign(place, activePlayer.token) == "cant") {
             return;
         }
-        game.placeSign(row, column, activePlayer.token)
-        console.log(`Placed the sign in ${column} x ${row} location`)
+        game.placeSign(place, activePlayer.token)
+        console.log(`Placed the sign in ${place} location`)
         game.printBoard()
         
         winChecker();
@@ -198,6 +204,7 @@ function playGameInDOM() {
     const container = document.querySelector(".container");
 
     const displayBoard = () => {
+        container.textContent = ""
         
         board.forEach((array) => array.forEach((element) => {
             let newButton = document.createElement("button");
@@ -219,12 +226,22 @@ function playGameInDOM() {
 
 
 
-playGame.playRound(1, 1)
-playGame.playRound(1, 3)
-playGame.playRound(1, 2)
 
-let asss = playGameInDOM()
-asss.displayBoard()
+
+
+ // let asss = playGameInDOM()
+ // asss.displayBoard()
+
+playGame.playRound(2)
+playGame.playRound(3)
+playGame.playRound(4)
+playGame.playRound(5);
+playGame.playRound(1)
+playGame.playRound(6)
+playGame.playRound(2)
+playGame.playRound(2)
+playGame.playRound(2)
+playGame.playRound(8)
 
 
 
