@@ -112,6 +112,16 @@ const playGame =( function () {
         }
     }
 
+    let roundwinner;
+
+    const roundwinnerfunc = () => {
+        return roundwinner
+    }
+    
+    const turnReturner = () => {
+        return `It's ${activePlayer.name}s turn`;
+    } 
+
     const winChecker = () => {
         
         
@@ -119,7 +129,7 @@ const playGame =( function () {
             let row = board[i]
             for (let j = 0; j < 1; j++) {
                 if (!(row[j].getCellValue() == 0) && (row[j].getCellValue() == row[j+1].getCellValue()) && (row[j].getCellValue() == row[j+2].getCellValue())) {
-                    console.log(`${activePlayer.name} is won!!!`);
+                    roundwinner = `${activePlayer.name} is won!!!`
                     activePlayer = players[1];
                     game.resetBoard();
                     return
@@ -131,7 +141,7 @@ const playGame =( function () {
         
         for (let j = 0; j < 3; j++) {
             if (!(board[0][j].getCellValue() == 0) && (board[0][j].getCellValue() == board[1][j].getCellValue()) && (board[0][j].getCellValue() == board[2][j].getCellValue())) {
-                console.log(`${activePlayer.name} is won!!!`);
+                roundwinner= `${activePlayer.name} is won!!!`
                 activePlayer = players[1];
                 game.resetBoard();
                 return
@@ -142,14 +152,14 @@ const playGame =( function () {
         }
 
         if (!(board[0][0].getCellValue() == 0) && (board[0][0].getCellValue() == board[1][1].getCellValue()) && (board[0][0].getCellValue() == board[2][2].getCellValue())) {
-            console.log(`${activePlayer.name} is won!!!`);
+            roundwinner= `${activePlayer.name} is won!!!`
             activePlayer = players[1];
             game.resetBoard();
             return
         }
 
         if (!(board[0][2].getCellValue() == 0) && (board[0][2].getCellValue() == board[1][1].getCellValue()) && (board[0][2].getCellValue() == board[2][0].getCellValue())) {
-            console.log(`${activePlayer.name} is won!!!`);
+            roundwinner= `${activePlayer.name} is won!!!`
             activePlayer = players[1];
             game.resetBoard();
             return
@@ -190,7 +200,10 @@ const playGame =( function () {
     return {
         playRound,
         displayBoard,
-        loanBoard
+        loanBoard,
+        winChecker,
+        roundwinnerfunc,
+        turnReturner
        
     }
 })();
@@ -200,16 +213,19 @@ function playGameInDOM() {
     const board = playGame.loanBoard();
     const container = document.querySelector(".container");
     let boxes = container.childNodes;
+    const declareinfo = document.querySelector(".declareinfo");
+    const turndisplayer = document.querySelector(".turndisplayer")
 
 
-    //this is creating the board we should also have a method for just updating the board
+    
     const displayBoard = () => {
+        turndisplayer.textContent = playGame.turnReturner();
         container.textContent = ""
-        
         board.forEach((array) => array.forEach((element) => {
             let newButton = document.createElement("button");
             newButton.textContent = element.getCellValue();
             container.appendChild(newButton);
+            
             
         }))
         
@@ -218,6 +234,7 @@ function playGameInDOM() {
             boxes[i].addEventListener("click", () => {
                 
                 playGame.playRound(i + 1);
+                infoDisplayer();
                 displayBoard();
                 
             } )
@@ -226,17 +243,21 @@ function playGameInDOM() {
         
     }
 
+    const infoDisplayer = () => {
+        //bunu da aşagıdaki ile aynı sekilde yap
+        turndisplayer.textContent = playGame.turnReturner();
 
+        if (playGame.roundwinnerfunc()) {
+            declareinfo.textContent = playGame.roundwinnerfunc();
+        }
+    }
     
 
     
 
     
     
-    //const takeInputFromUi = (place) => {
-    //    playGame.playRound(place)
-
-    //}
+    
 
 
     return {
@@ -258,6 +279,6 @@ function playGameInDOM() {
 const asss = playGameInDOM();
 asss.displayBoard()
 
-
+console.log(playGame.roundwinner)
 
 
