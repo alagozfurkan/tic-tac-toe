@@ -112,9 +112,6 @@ const playGame =( function () {
         }
     }
 
-    
-    
-
     const winChecker = () => {
         
         
@@ -202,7 +199,10 @@ const playGame =( function () {
 function playGameInDOM() {
     const board = playGame.loanBoard();
     const container = document.querySelector(".container");
+    let boxes = container.childNodes;
 
+
+    //this is creating the board we should also have a method for just updating the board
     const displayBoard = () => {
         container.textContent = ""
         
@@ -210,14 +210,38 @@ function playGameInDOM() {
             let newButton = document.createElement("button");
             newButton.textContent = element.getCellValue();
             container.appendChild(newButton);
+            
         }))
+        
+        for (let i = 0; i < 9; i++) {
+            
+            boxes[i].addEventListener("click", () => {
+                
+                playGame.playRound(i + 1);
+                displayBoard();
+                
+            } )
+            
+        }
+        
     }
+
+
     
 
+    
+
+    
+    
+    //const takeInputFromUi = (place) => {
+    //    playGame.playRound(place)
+
+    //}
 
 
     return {
-        displayBoard
+        displayBoard,
+        
     }
 
 }
@@ -229,19 +253,10 @@ function playGameInDOM() {
 
 
 
- // let asss = playGameInDOM()
- // asss.displayBoard()
+ 
 
-playGame.playRound(2)
-playGame.playRound(3)
-playGame.playRound(4)
-playGame.playRound(5);
-playGame.playRound(1)
-playGame.playRound(6)
-playGame.playRound(2)
-playGame.playRound(2)
-playGame.playRound(2)
-playGame.playRound(8)
+const asss = playGameInDOM();
+asss.displayBoard()
 
 
 
