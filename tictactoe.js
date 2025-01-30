@@ -102,6 +102,11 @@ const playGame =( function () {
         }
     ]
 
+    const changePlayerName = (playeronename, playertwoname) => {
+        players[0].name = playeronename;
+        players[1].name = playertwoname;
+    }
+
     let activePlayer = players[0];
 
     const roundIt = () => {
@@ -203,6 +208,7 @@ const playGame =( function () {
         loanBoard,
         winChecker,
         roundwinnerfunc,
+        changePlayerName,
         turnReturner
        
     }
@@ -215,8 +221,11 @@ function playGameInDOM() {
     let boxes = container.childNodes;
     const declareinfo = document.querySelector(".declareinfo");
     const turndisplayer = document.querySelector(".turndisplayer")
-
-
+    const submitbutton = document.querySelector(".submitbutton")
+    const firstplayername = document.querySelector("#fplayer")
+    const secondplayername = document.querySelector("#splayer")
+    const theboard = document.querySelector(".theboard")
+    const form = document.querySelector(".form")
     
     const displayBoard = () => {
         turndisplayer.textContent = playGame.turnReturner();
@@ -244,7 +253,6 @@ function playGameInDOM() {
     }
 
     const infoDisplayer = () => {
-        //bunu da aşagıdaki ile aynı sekilde yap
         turndisplayer.textContent = playGame.turnReturner();
 
         if (playGame.roundwinnerfunc()) {
@@ -252,6 +260,16 @@ function playGameInDOM() {
         }
     }
     
+    const takeUserName = () => {
+        submitbutton.addEventListener("click", (e) => {
+            e.preventDefault()
+            playGame.changePlayerName(firstplayername.value, secondplayername.value)
+            //board is deafult nonvisible this shows it
+            theboard.style.display = "block"
+            form.style.display = "none"
+        })
+        
+    }
 
     
 
@@ -262,6 +280,7 @@ function playGameInDOM() {
 
     return {
         displayBoard,
+        takeUserName
         
     }
 
@@ -277,8 +296,7 @@ function playGameInDOM() {
  
 
 const asss = playGameInDOM();
+asss.takeUserName()
 asss.displayBoard()
-
-console.log(playGame.roundwinner)
 
 
