@@ -1,6 +1,6 @@
 function cell() {
     //all cells have default value of "0"
-    let value = 0;  //explain this: if you don't put let in here when a cell's value change all the cell values are changing why? when you
+    let value = "";  //explain this: if you don't put let in here when a cell's value change all the cell values are changing why? when you
     // put let before it it does not change why is this?
 
     //you can change the value of the cell
@@ -13,7 +13,7 @@ function cell() {
     }
 
     const resetCellValue = () => {
-        value = 0;
+        value = "";
     }
 
 
@@ -93,12 +93,12 @@ const playGame =( function () {
     players = [
         {
             name: "playlerone",
-            token: 1
+            token: "X"
         },
 
         {
             name: "playertwo",
-            token: 2
+            token: "O"
         }
     ]
 
@@ -122,10 +122,15 @@ const playGame =( function () {
     const roundwinnerfunc = () => {
         return roundwinner
     }
+
+    const resetroundwinner = () => {
+        roundwinner = undefined;
+    }
     
     const turnReturner = () => {
-        return `It's ${activePlayer.name}s turn`;
+        return `It's ${activePlayer.name}'s turn`;
     } 
+
 
     const winChecker = () => {
         
@@ -134,7 +139,7 @@ const playGame =( function () {
             let row = board[i]
             for (let j = 0; j < 1; j++) {
                 if (!(row[j].getCellValue() == 0) && (row[j].getCellValue() == row[j+1].getCellValue()) && (row[j].getCellValue() == row[j+2].getCellValue())) {
-                    roundwinner = `${activePlayer.name} is won!!!`
+                    roundwinner = `${activePlayer.name} won!!!`
                     activePlayer = players[1];
                     game.resetBoard();
                     return
@@ -146,7 +151,7 @@ const playGame =( function () {
         
         for (let j = 0; j < 3; j++) {
             if (!(board[0][j].getCellValue() == 0) && (board[0][j].getCellValue() == board[1][j].getCellValue()) && (board[0][j].getCellValue() == board[2][j].getCellValue())) {
-                roundwinner= `${activePlayer.name} is won!!!`
+                roundwinner= `${activePlayer.name} won!!!`
                 activePlayer = players[1];
                 game.resetBoard();
                 return
@@ -157,14 +162,14 @@ const playGame =( function () {
         }
 
         if (!(board[0][0].getCellValue() == 0) && (board[0][0].getCellValue() == board[1][1].getCellValue()) && (board[0][0].getCellValue() == board[2][2].getCellValue())) {
-            roundwinner= `${activePlayer.name} is won!!!`
+            roundwinner= `${activePlayer.name} won!!!`
             activePlayer = players[1];
             game.resetBoard();
             return
         }
 
         if (!(board[0][2].getCellValue() == 0) && (board[0][2].getCellValue() == board[1][1].getCellValue()) && (board[0][2].getCellValue() == board[2][0].getCellValue())) {
-            roundwinner= `${activePlayer.name} is won!!!`
+            roundwinner= `${activePlayer.name} won!!!`
             activePlayer = players[1];
             game.resetBoard();
             return
@@ -173,43 +178,28 @@ const playGame =( function () {
     }   
 
     const playRound = (place) => {
-        console.log(`It's ${activePlayer.name}s turn`)
         if (game.placeSign(place, activePlayer.token) == "cant") {
             return;
         }
         game.placeSign(place, activePlayer.token)
-        console.log(`Placed the sign in ${place} location`)
-        game.printBoard()
-        
         winChecker();
         roundIt()
-        
-        
     }
 
     const loanBoard = () => {
         return board;
     }
 
-    const displayBoard = () => {
-        
-        const container = document.querySelector(".container");
-        board.forEach((array) => array.forEach((element) => {
-            let newButton = document.createElement("button");
-            //this is not working fix this
-            newButton.textContent = element.getCellValue();
-            container.appendChild(newButton);
-        }))
-    }
+    
 
     return {
         playRound,
-        displayBoard,
         loanBoard,
         winChecker,
         roundwinnerfunc,
         changePlayerName,
-        turnReturner
+        turnReturner,
+        resetroundwinner
        
     }
 })();
@@ -226,12 +216,15 @@ function playGameInDOM() {
     const secondplayername = document.querySelector("#splayer")
     const theboard = document.querySelector(".theboard")
     const form = document.querySelector(".form")
+    const restartbutton = document.querySelector(".restartbutton")
+    const restart = document.querySelector(".restart")
     
     const displayBoard = () => {
         turndisplayer.textContent = playGame.turnReturner();
         container.textContent = ""
         board.forEach((array) => array.forEach((element) => {
             let newButton = document.createElement("button");
+            newButton.classList.add("box")
             newButton.textContent = element.getCellValue();
             container.appendChild(newButton);
             
@@ -245,6 +238,7 @@ function playGameInDOM() {
                 playGame.playRound(i + 1);
                 infoDisplayer();
                 displayBoard();
+                restartGame();
                 
             } )
             
@@ -255,9 +249,7 @@ function playGameInDOM() {
     const infoDisplayer = () => {
         turndisplayer.textContent = playGame.turnReturner();
 
-        if (playGame.roundwinnerfunc()) {
-            declareinfo.textContent = playGame.roundwinnerfunc();
-        }
+    
     }
     
     const takeUserName = () => {
@@ -265,10 +257,33 @@ function playGameInDOM() {
             e.preventDefault()
             playGame.changePlayerName(firstplayername.value, secondplayername.value)
             //board is deafult nonvisible this shows it
-            theboard.style.display = "block"
+            theboard.style.display = "flex"
+            //when form submmited it dissapears
             form.style.display = "none"
+            displayBoard()
         })
         
+    }
+
+    const restartGame = () => {
+
+        if (playGame.roundwinnerfunc()) {
+            declareinfo.textContent = playGame.roundwinnerfunc();
+            playGame.resetroundwinner()
+            restartbutton.addEventListener("click", () => {
+                
+                playGame.roundwinnerfunc()
+                theboard.style.display = "flex";
+                //makes itself invisible
+                restart.style.display = "none";
+                
+            })
+            
+            console.log("selamlar")
+            //when someone won board disappears
+            theboard.style.display = "none";
+            restart.style.display = "flex";
+        }
     }
 
     
@@ -280,7 +295,7 @@ function playGameInDOM() {
 
     return {
         displayBoard,
-        takeUserName
+        takeUserName,
         
     }
 
@@ -297,6 +312,7 @@ function playGameInDOM() {
 
 const asss = playGameInDOM();
 asss.takeUserName()
-asss.displayBoard()
+
+
 
 
